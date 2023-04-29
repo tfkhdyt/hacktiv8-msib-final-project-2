@@ -44,7 +44,7 @@ func (u *User) CreateToken() (string, errs.MessageErr) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"userId": u.ID,
-			"exp":    time.Now().Add(1 * time.Hour),
+			"exp":    time.Now().Add(1 * time.Hour).Unix(),
 		})
 
 	signedString, err := token.SignedString([]byte(JWT_SECRET))
