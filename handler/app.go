@@ -26,6 +26,7 @@ func StartApp() {
 	userHandler := http_handler.NewUserHandler(userService)
 
 	r.POST("/users/register", userHandler.Register)
+	r.POST("/users/login", userHandler.Login)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

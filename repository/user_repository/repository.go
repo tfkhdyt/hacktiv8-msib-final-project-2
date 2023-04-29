@@ -7,7 +7,7 @@ import (
 
 type UserRepository interface {
 	Register(user *entity.User) (*entity.User, errs.MessageErr)
-	// Login(email, password string) (string, errs.MessageErr)
+	GetUserByEmail(email string) (*entity.User, errs.MessageErr)
 	// UpdateUser(email, password string) (*entity.User, errs.MessageErr)
 	// DeleteUser(token string) errs.MessageErr
 }
