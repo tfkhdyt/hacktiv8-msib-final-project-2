@@ -37,7 +37,10 @@ type LoginResponse struct {
 	Token string `json:"token" binding:"jwt"`
 }
 
-type UpdateUserRequest = LoginRequest
+type UpdateUserRequest struct {
+	Email    string `json:"email" binding:"email,required"`
+	Username string `json:"username" binding:"required"`
+}
 
 type UpdateUserResponse struct {
 	ID        uint      `json:"id"`
