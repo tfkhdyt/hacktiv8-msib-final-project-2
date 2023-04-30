@@ -52,3 +52,27 @@ func (u *userHandler) Login(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, token)
 }
+
+func (u *userHandler) UpdateUser(ctx *gin.Context) {
+	var requestBody dto.UpdateUserRequest
+	userID, ok := ctx.MustGet("userId").(uint)
+	if !ok {
+		newError := errs.NewBadRequest("Failed to get user id")
+		ctx.JSON(newError.StatusCode(), newError)
+		return
+	}
+
+	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
+		newError := errs.NewUnprocessableEntity(err.Error())
+		ctx.JSON(newError.StatusCode(), newError)
+		return
+	}
+
+	updatedUser, err := u.userService.UpdateUser(userID, &requestBody)
+	if err != nil {
+		ctx.JSON(err.StatusCode(), err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, updatedUser)
+}
