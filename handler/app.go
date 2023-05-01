@@ -25,8 +25,11 @@ func StartApp() {
 	userService := service.NewUserService(userRepo)
 	userHandler := http_handler.NewUserHandler(userService)
 
+	authService := service.NewAuthService(userRepo)
+
 	r.POST("/users/register", userHandler.Register)
 	r.POST("/users/login", userHandler.Login)
+	r.PUT("/users", authService.Authentication(), userHandler.UpdateUser)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

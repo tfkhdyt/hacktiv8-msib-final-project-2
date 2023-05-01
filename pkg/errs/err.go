@@ -57,3 +57,19 @@ func NewNotFound(message string) MessageErr {
 		ErrError:      "DATA_NOT_FOUND",
 	}
 }
+
+func NewUnauthenticated(message string) MessageErr {
+	return &MessageErrData{
+		ErrMessage:    message,
+		ErrStatusCode: http.StatusUnauthorized,
+		ErrError:      "UNAUTHENTICATED",
+	}
+}
+
+func NewUnauthorized(message string) MessageErr {
+	return &MessageErrData{
+		ErrMessage:    message,
+		ErrStatusCode: http.StatusForbidden,
+		ErrError:      "UNAUTHORIZED",
+	}
+}

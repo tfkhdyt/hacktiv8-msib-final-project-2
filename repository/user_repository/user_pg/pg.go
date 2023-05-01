@@ -36,3 +36,21 @@ func (u *userPG) GetUserByEmail(email string) (*entity.User, errs.MessageErr) {
 
 	return &user, nil
 }
+
+func (u *userPG) GetUserByID(id uint) (*entity.User, errs.MessageErr) {
+	var user entity.User
+
+	if err := u.db.First(&user, id).Error; err != nil {
+		return nil, errs.NewNotFound(fmt.Sprintf("User with id %v is not found", id))
+	}
+
+	return &user, nil
+}
+
+func (u *userPG) UpdateUser(oldUser *entity.User, newUser *entity.User) (*entity.User, errs.MessageErr) {
+	if err := u.db.Model(oldUser).Updates(newUser).Error; err != nil {
+		return nil, errs.NewBadRequest(fmt.Sprintf("Failed to update user with id %v", oldUser.ID))
+	}
+
+	return oldUser, nil
+}

@@ -2,6 +2,7 @@ package service
 
 import (
 	"hacktiv8-msib-final-project-2/dto"
+	"hacktiv8-msib-final-project-2/entity"
 	"hacktiv8-msib-final-project-2/pkg/errs"
 	"hacktiv8-msib-final-project-2/repository/user_repository"
 )
@@ -9,7 +10,7 @@ import (
 type UserService interface {
 	Register(payload *dto.RegisterRequest) (*dto.RegisterResponse, errs.MessageErr)
 	Login(payload *dto.LoginRequest) (*dto.LoginResponse, errs.MessageErr)
-	// UpdateUser(payload *dto.UpdateUserRequest) (*dto.UpdateUserResponse, errs.MessageErr)
+	UpdateUser(userID uint, payload *dto.UpdateUserRequest) (*dto.UpdateUserResponse, errs.MessageErr)
 	// DeleteUser(payload *dto.DeleteUserRequest) (*dto.DeleteUserResponse, errs.MessageErr)
 }
 
@@ -59,6 +60,32 @@ func (u *userService) Login(payload *dto.LoginRequest) (*dto.LoginResponse, errs
 
 	response := &dto.LoginResponse{
 		Token: token,
+	}
+
+	return response, nil
+}
+
+func (u *userService) UpdateUser(userID uint, payload *dto.UpdateUserRequest) (*dto.UpdateUserResponse, errs.MessageErr) {
+	oldUser, err := u.userRepo.GetUserByID(userID)
+	if err != nil {
+		return nil, err
+	}
+	newUser := &entity.User{
+		Email:    payload.Email,
+		Username: payload.Username,
+	}
+
+	updatedUser, err2 := u.userRepo.UpdateUser(oldUser, newUser)
+	if err2 != nil {
+		return nil, err2
+	}
+
+	response := &dto.UpdateUserResponse{
+		ID:        updatedUser.ID,
+		Email:     updatedUser.Email,
+		Username:  updatedUser.Username,
+		Age:       updatedUser.Age,
+		UpdatedAt: updatedUser.UpdatedAt,
 	}
 
 	return response, nil
