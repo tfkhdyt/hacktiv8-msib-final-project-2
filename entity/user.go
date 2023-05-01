@@ -59,12 +59,12 @@ func (u *User) CreateToken() (string, errs.MessageErr) {
 
 func (u *User) ValidateToken(bearerToken string) errs.MessageErr {
 	if isBearer := strings.HasPrefix(bearerToken, "Bearer"); !isBearer {
-		return errs.NewUnauthorized("Token type should be Bearer")
+		return errs.NewUnauthenticated("Token type should be Bearer")
 	}
 
 	splitToken := strings.Fields(bearerToken)
 	if len(splitToken) != 2 {
-		return errs.NewUnauthorized("Token is not valid")
+		return errs.NewUnauthenticated("Token is not valid")
 	}
 
 	tokenString := splitToken[1]
@@ -76,7 +76,7 @@ func (u *User) ValidateToken(bearerToken string) errs.MessageErr {
 	var mapClaims jwt.MapClaims
 
 	if claims, ok := token.Claims.(jwt.MapClaims); !ok || !token.Valid {
-		return errs.NewUnauthorized("Token is not valid")
+		return errs.NewUnauthenticated("Token is not valid")
 	} else {
 		mapClaims = claims
 	}
@@ -87,12 +87,12 @@ func (u *User) ValidateToken(bearerToken string) errs.MessageErr {
 func (u *User) ParseToken(tokenString string) (*jwt.Token, errs.MessageErr) {
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errs.NewUnauthorized("Token method is not valid")
+			return nil, errs.NewUnauthenticated("Token method is not valid")
 		}
 		return []byte(JWT_SECRET), nil
 	})
 	if err != nil {
-		return nil, errs.NewUnauthorized("Token is not valid")
+		return nil, errs.NewUnauthenticated("Token is not valid")
 	}
 
 	return token, nil
@@ -100,7 +100,7 @@ func (u *User) ParseToken(tokenString string) (*jwt.Token, errs.MessageErr) {
 
 func (u *User) bindTokenToUserEntity(claim jwt.MapClaims) errs.MessageErr {
 	if id, ok := claim["userId"].(float64); !ok {
-		return errs.NewUnauthorized("Token doesn't contains userId")
+		return errs.NewUnauthenticated("Token doesn't contains userId")
 	} else {
 		u.ID = uint(id)
 	}
