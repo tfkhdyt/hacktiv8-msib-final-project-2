@@ -3,7 +3,6 @@ package handler
 import (
 	"hacktiv8-msib-final-project-2/database"
 	"hacktiv8-msib-final-project-2/handler/http_handler"
-	"hacktiv8-msib-final-project-2/handler/middleware"
 	"hacktiv8-msib-final-project-2/repository/user_repository/user_pg"
 	"hacktiv8-msib-final-project-2/service"
 	"log"
@@ -26,9 +25,11 @@ func StartApp() {
 	userService := service.NewUserService(userRepo)
 	userHandler := http_handler.NewUserHandler(userService)
 
+	authService := service.NewAuthService(userRepo)
+
 	r.POST("/users/register", userHandler.Register)
 	r.POST("/users/login", userHandler.Login)
-	r.PUT("/users", middleware.Authentication(), userHandler.UpdateUser)
+	r.PUT("/users", authService.Authentication(), userHandler.UpdateUser)
 
 	log.Fatalln(r.Run(":" + PORT))
 }
