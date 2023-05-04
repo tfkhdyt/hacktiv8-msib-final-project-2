@@ -11,7 +11,7 @@ type UserService interface {
 	Register(payload *dto.RegisterRequest) (*dto.RegisterResponse, errs.MessageErr)
 	Login(payload *dto.LoginRequest) (*dto.LoginResponse, errs.MessageErr)
 	UpdateUser(userID uint, payload *dto.UpdateUserRequest) (*dto.UpdateUserResponse, errs.MessageErr)
-	// DeleteUser(payload *dto.DeleteUserRequest) (*dto.DeleteUserResponse, errs.MessageErr)
+	DeleteUser(id uint) (*dto.DeleteUserResponse, errs.MessageErr)
 }
 
 type userService struct {
@@ -86,6 +86,18 @@ func (u *userService) UpdateUser(userID uint, payload *dto.UpdateUserRequest) (*
 		Username:  updatedUser.Username,
 		Age:       updatedUser.Age,
 		UpdatedAt: updatedUser.UpdatedAt,
+	}
+
+	return response, nil
+}
+
+func (u *userService) DeleteUser(id uint) (*dto.DeleteUserResponse, errs.MessageErr) {
+	if err := u.userRepo.DeleteUser(id); err != nil {
+		return nil, err
+	}
+
+	response := &dto.DeleteUserResponse{
+		Message: "Your account has been successfully deleted",
 	}
 
 	return response, nil
