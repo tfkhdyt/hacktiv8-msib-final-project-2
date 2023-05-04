@@ -5,7 +5,6 @@ import (
 	"hacktiv8-msib-final-project-2/entity"
 	"hacktiv8-msib-final-project-2/pkg/errs"
 	"hacktiv8-msib-final-project-2/service"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -64,8 +63,6 @@ func (u *userHandler) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	log.Println("Email:", userData.Email)
-
 	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 		newError := errs.NewUnprocessableEntity(err.Error())
 		ctx.JSON(newError.StatusCode(), newError)
@@ -79,4 +76,21 @@ func (u *userHandler) UpdateUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, updatedUser)
+}
+
+func (u *userHandler) DeleteUser(ctx *gin.Context) {
+	userData, ok := ctx.MustGet("userData").(*entity.User)
+	if !ok {
+		newError := errs.NewBadRequest("Failed to get user data")
+		ctx.JSON(newError.StatusCode(), newError)
+		return
+	}
+
+	response, err := u.userService.DeleteUser(userData.ID)
+	if err != nil {
+		ctx.JSON(err.StatusCode(), err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
