@@ -9,7 +9,6 @@ type CreatePhotoRequest struct {
 	Title    string `json:"title" binding:"required"`
 	Caption  string `json:"caption"`
 	PhotoURL string `json:"photo_url" binding:"required,url"`
-	UserID   uint   `json:"user_id" binding:"required"`
 }
 
 func (p *CreatePhotoRequest) ToEntity() *entity.Photo {
