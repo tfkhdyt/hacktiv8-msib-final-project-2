@@ -6,7 +6,7 @@ import (
 )
 
 type PhotoRepository interface {
-	CreatePhoto(userID uint, photo *entity.Photo) (*entity.Photo, errs.MessageErr)
+	CreatePhoto(user *entity.User, photo *entity.Photo) (*entity.Photo, errs.MessageErr)
 	// GetAllPhotos() ([]entity.Photo, errs.MessageErr)
 	// UpdatePhoto(oldPhoto *entity.Photo, newPhoto *entity.Photo) (*entity.Photo, errs.MessageErr)
 	// DeletePhoto(id uint) errs.MessageErr
