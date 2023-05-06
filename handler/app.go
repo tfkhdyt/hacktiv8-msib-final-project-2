@@ -3,6 +3,7 @@ package handler
 import (
 	"hacktiv8-msib-final-project-2/database"
 	"hacktiv8-msib-final-project-2/handler/http_handler"
+	"hacktiv8-msib-final-project-2/repository/photo_repository/photo_pg"
 	"hacktiv8-msib-final-project-2/repository/user_repository/user_pg"
 	"hacktiv8-msib-final-project-2/service"
 	"log"
@@ -27,10 +28,16 @@ func StartApp() {
 
 	authService := service.NewAuthService(userRepo)
 
+	photoRepo := photo_pg.NewPhotoPG(db)
+	photoService := service.NewPhotoService(photoRepo)
+	photoHandler := http_handler.NewPhotoService(photoService)
+
 	r.POST("/users/register", userHandler.Register)
 	r.POST("/users/login", userHandler.Login)
 	r.PUT("/users", authService.Authentication(), userHandler.UpdateUser)
 	r.DELETE("/users", authService.Authentication(), userHandler.DeleteUser)
+
+	r.POST("/photos", authService.Authentication(), photoHandler.CreatePhoto)
 
 	log.Fatalln(r.Run(":" + PORT))
 }
