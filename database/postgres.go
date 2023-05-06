@@ -19,7 +19,7 @@ func init() {
 		log.Fatalln(err.Error())
 	}
 
-	if err = db.AutoMigrate(&entity.User{}); err != nil {
+	if err = db.AutoMigrate(&entity.User{}, &entity.Photo{}); err != nil {
 		log.Fatalln(err.Error())
 	}
 
