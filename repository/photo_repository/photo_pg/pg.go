@@ -25,3 +25,12 @@ func (p *photoPg) CreatePhoto(user *entity.User, photo *entity.Photo) (*entity.P
 
 	return photo, nil
 }
+
+func (p *photoPg) GetAllPhotos() ([]entity.Photo, errs.MessageErr) {
+	var photos []entity.Photo
+	if err := p.db.Find(&photos).Error; err != nil {
+		return nil, errs.NewInternalServerError("Failed to get all photos")
+	}
+
+	return photos, nil
+}
