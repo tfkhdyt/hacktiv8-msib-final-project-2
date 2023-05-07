@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2023-05-07
+
+### ⛰️  Features
+
+- *(handler)* Add handler and route to get all photos
+- *(photo-dto)* Add GetAllPhotosResponse struct
+- *(photo-repo)* Add get all photos method
+- *(photo-service)* Add get all photos method
+
 ## [0.1.0] - 2023-05-06
 
 ### ⛰️  Features
@@ -23,6 +32,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(uncategorized)* Bump version to v0.1.0
 - *(uncategorized)* Create change log for v0.0.1
 - *(uncategorized)* Setup git-cliff
 
