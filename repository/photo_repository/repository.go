@@ -10,5 +10,5 @@ type PhotoRepository interface {
 	GetAllPhotos() ([]entity.Photo, errs.MessageErr)
 	GetPhotoByID(id uint) (*entity.Photo, errs.MessageErr)
 	UpdatePhoto(oldPhoto *entity.Photo, newPhoto *entity.Photo) (*entity.Photo, errs.MessageErr)
-	// DeletePhoto(id uint) errs.MessageErr
+	DeletePhoto(id uint) errs.MessageErr
 }
