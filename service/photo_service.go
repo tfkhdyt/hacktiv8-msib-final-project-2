@@ -11,6 +11,7 @@ import (
 type PhotoService interface {
 	CreatePhoto(user *entity.User, payload *dto.CreatePhotoRequest) (*dto.CreatePhotoResponse, errs.MessageErr)
 	GetAllPhotos() ([]dto.GetAllPhotosResponse, errs.MessageErr)
+	UpdatePhoto(id uint, payload *dto.UpdatePhotoRequest) (*dto.UpdatePhotoResponse, errs.MessageErr)
 }
 
 type photoService struct {
@@ -68,6 +69,30 @@ func (p *photoService) GetAllPhotos() ([]dto.GetAllPhotosResponse, errs.MessageE
 				Username: user.Username,
 			},
 		})
+	}
+
+	return response, nil
+}
+
+func (p *photoService) UpdatePhoto(id uint, payload *dto.UpdatePhotoRequest) (*dto.UpdatePhotoResponse, errs.MessageErr) {
+	oldPhoto, err := p.photoRepo.GetPhotoByID(id)
+	if err != nil {
+		return nil, err
+	}
+	newPhoto := payload.ToEntity()
+
+	updatedPhoto, err2 := p.photoRepo.UpdatePhoto(oldPhoto, newPhoto)
+	if err2 != nil {
+		return nil, err2
+	}
+
+	response := &dto.UpdatePhotoResponse{
+		ID:        updatedPhoto.ID,
+		Title:     updatedPhoto.Title,
+		Caption:   updatedPhoto.Caption,
+		PhotoURL:  updatedPhoto.PhotoURL,
+		UserID:    updatedPhoto.UserID,
+		UpdatedAt: updatedPhoto.UpdatedAt,
 	}
 
 	return response, nil
