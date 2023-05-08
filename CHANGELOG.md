@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2023-05-08
+
+### ⛰️  Features
+
+- *(auth-service)* Add PhotosAuthorization middleware
+- *(photo-dto)* Add UpdatePhotoRequest and UpdatePhotoResponse
+- *(photo-handler)* Add handler and route for updating photo
+- *(photo-repo)* Add GetPhotoByID and UpdatePhoto method
+- *(photo-service)* Add UpdatePhoto method
+
+### ⚙️ Miscellaneous Tasks
+
+- *(uncategorized)* Bump version to v0.2.0
+
 ## [0.2.0] - 2023-05-07
 
 ### ⛰️  Features
