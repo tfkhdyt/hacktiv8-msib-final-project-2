@@ -43,3 +43,22 @@ type UserData struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 }
+
+type UpdatePhotoRequest CreatePhotoRequest
+
+func (p *UpdatePhotoRequest) ToEntity() *entity.Photo {
+	return &entity.Photo{
+		Title:    p.Title,
+		Caption:  p.Caption,
+		PhotoURL: p.PhotoURL,
+	}
+}
+
+type UpdatePhotoResponse struct {
+	ID        uint      `json:"id"`
+	Title     string    `json:"title"`
+	Caption   string    `json:"caption"`
+	PhotoURL  string    `json:"photo_url"`
+	UserID    uint      `json:"user_id"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
