@@ -62,3 +62,7 @@ type UpdatePhotoResponse struct {
 	UserID    uint      `json:"user_id"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type DeletePhotoResponse struct {
+	Message string `json:"message"`
+}

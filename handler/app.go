@@ -40,6 +40,7 @@ func StartApp() {
 	r.POST("/photos", authService.Authentication(), photoHandler.CreatePhoto)
 	r.GET("/photos", authService.Authentication(), photoHandler.GetAllPhotos)
 	r.PUT("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.UpdatePhoto)
+	r.DELETE("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.DeletePhoto)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

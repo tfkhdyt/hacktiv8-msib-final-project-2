@@ -84,3 +84,21 @@ func (p *photoHandler) UpdatePhoto(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, updatedPhoto)
 }
+
+func (p *photoHandler) DeletePhoto(ctx *gin.Context) {
+	photoID := ctx.Param("photoID")
+	photoIDUint, err := strconv.ParseUint(photoID, 10, 32)
+	if err != nil {
+		newError := errs.NewBadRequest("Photo id should be an unsigned integer")
+		ctx.JSON(newError.StatusCode(), newError)
+		return
+	}
+
+	response, err2 := p.photoService.DeletePhoto(uint(photoIDUint))
+	if err2 != nil {
+		ctx.JSON(err2.StatusCode(), err2)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response)
+}

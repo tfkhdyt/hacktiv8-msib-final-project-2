@@ -52,3 +52,11 @@ func (p *photoPg) UpdatePhoto(oldPhoto *entity.Photo, newPhoto *entity.Photo) (*
 
 	return oldPhoto, nil
 }
+
+func (p *photoPg) DeletePhoto(id uint) errs.MessageErr {
+	if err := p.db.Delete(&entity.Photo{}, id).Error; err != nil {
+		return errs.NewInternalServerError(fmt.Sprintf("Failed to delete photo with id %d", id))
+	}
+
+	return nil
+}

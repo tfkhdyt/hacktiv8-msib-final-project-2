@@ -12,6 +12,7 @@ type PhotoService interface {
 	CreatePhoto(user *entity.User, payload *dto.CreatePhotoRequest) (*dto.CreatePhotoResponse, errs.MessageErr)
 	GetAllPhotos() ([]dto.GetAllPhotosResponse, errs.MessageErr)
 	UpdatePhoto(id uint, payload *dto.UpdatePhotoRequest) (*dto.UpdatePhotoResponse, errs.MessageErr)
+	DeletePhoto(id uint) (*dto.DeletePhotoResponse, errs.MessageErr)
 }
 
 type photoService struct {
@@ -93,6 +94,18 @@ func (p *photoService) UpdatePhoto(id uint, payload *dto.UpdatePhotoRequest) (*d
 		PhotoURL:  updatedPhoto.PhotoURL,
 		UserID:    updatedPhoto.UserID,
 		UpdatedAt: updatedPhoto.UpdatedAt,
+	}
+
+	return response, nil
+}
+
+func (p *photoService) DeletePhoto(id uint) (*dto.DeletePhotoResponse, errs.MessageErr) {
+	if err := p.photoRepo.DeletePhoto(id); err != nil {
+		return nil, err
+	}
+
+	response := &dto.DeletePhotoResponse{
+		Message: "Your photo has been successfully deleted",
 	}
 
 	return response, nil
