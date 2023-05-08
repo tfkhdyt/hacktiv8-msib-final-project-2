@@ -1,6 +1,7 @@
 package photo_pg
 
 import (
+	"fmt"
 	"hacktiv8-msib-final-project-2/entity"
 	"hacktiv8-msib-final-project-2/pkg/errs"
 	"hacktiv8-msib-final-project-2/repository/photo_repository"
@@ -33,4 +34,21 @@ func (p *photoPg) GetAllPhotos() ([]entity.Photo, errs.MessageErr) {
 	}
 
 	return photos, nil
+}
+
+func (p *photoPg) GetPhotoByID(id uint) (*entity.Photo, errs.MessageErr) {
+	var photo entity.Photo
+	if err := p.db.First(&photo, id).Error; err != nil {
+		return nil, errs.NewNotFound(fmt.Sprintf("Photo with id %d is not found", id))
+	}
+
+	return &photo, nil
+}
+
+func (p *photoPg) UpdatePhoto(oldPhoto *entity.Photo, newPhoto *entity.Photo) (*entity.Photo, errs.MessageErr) {
+	if err := p.db.Model(oldPhoto).Updates(newPhoto).Error; err != nil {
+		return nil, errs.NewInternalServerError(fmt.Sprintf("Failed to update photo with id %d", oldPhoto.ID))
+	}
+
+	return oldPhoto, nil
 }

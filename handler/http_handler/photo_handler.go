@@ -6,6 +6,7 @@ import (
 	"hacktiv8-msib-final-project-2/pkg/errs"
 	"hacktiv8-msib-final-project-2/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -57,4 +58,29 @@ func (p *photoHandler) GetAllPhotos(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, photos)
+}
+
+func (p *photoHandler) UpdatePhoto(ctx *gin.Context) {
+	var requestBody dto.UpdatePhotoRequest
+	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
+		newError := errs.NewUnprocessableEntity(err.Error())
+		ctx.JSON(newError.StatusCode(), newError)
+		return
+	}
+
+	photoID := ctx.Param("photoID")
+	photoIDUint, err := strconv.ParseUint(photoID, 10, 32)
+	if err != nil {
+		newError := errs.NewBadRequest("Photo id should be an unsigned integer")
+		ctx.JSON(newError.StatusCode(), newError)
+		return
+	}
+
+	updatedPhoto, err2 := p.photoService.UpdatePhoto(uint(photoIDUint), &requestBody)
+	if err2 != nil {
+		ctx.JSON(err2.StatusCode(), err2)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, updatedPhoto)
 }

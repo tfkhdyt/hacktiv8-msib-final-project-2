@@ -26,11 +26,11 @@ func StartApp() {
 	userService := service.NewUserService(userRepo)
 	userHandler := http_handler.NewUserHandler(userService)
 
-	authService := service.NewAuthService(userRepo)
-
 	photoRepo := photo_pg.NewPhotoPG(db)
 	photoService := service.NewPhotoService(photoRepo, userRepo)
 	photoHandler := http_handler.NewPhotoService(photoService)
+
+	authService := service.NewAuthService(userRepo, photoRepo)
 
 	r.POST("/users/register", userHandler.Register)
 	r.POST("/users/login", userHandler.Login)
@@ -39,6 +39,7 @@ func StartApp() {
 
 	r.POST("/photos", authService.Authentication(), photoHandler.CreatePhoto)
 	r.GET("/photos", authService.Authentication(), photoHandler.GetAllPhotos)
+	r.PUT("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.UpdatePhoto)
 
 	log.Fatalln(r.Run(":" + PORT))
 }
