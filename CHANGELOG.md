@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2023-05-08
+
+### ⛰️  Features
+
+- *(photo-dto)* Add DeletePhotoResponse struct
+- *(photo-handler)* Add handler and route to delete photo
+- *(photo-repo)* Add DeletePhoto method
+- *(photo-service)* Add DeletePhoto method
+
 ## [0.3.0] - 2023-05-08
 
 ### ⛰️  Features
@@ -14,6 +23,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks
 
+- *(uncategorized)* Bump version to v0.3.0
 - *(uncategorized)* Bump version to v0.2.0
 
 ## [0.2.0] - 2023-05-07
