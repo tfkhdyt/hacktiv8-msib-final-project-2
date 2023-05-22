@@ -21,6 +21,7 @@ type User struct {
 	Password string `gorm:"not null" binding:"required,min=6"`
 	Age      uint   `gorm:"not null" binding:"required,min=8"`
 	Photos   []Photo
+	Comments []Comment
 }
 
 func (u *User) HashPassword() errs.MessageErr {

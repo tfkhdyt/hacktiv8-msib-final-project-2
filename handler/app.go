@@ -3,6 +3,7 @@ package handler
 import (
 	"hacktiv8-msib-final-project-2/database"
 	"hacktiv8-msib-final-project-2/handler/http_handler"
+	commment_pg "hacktiv8-msib-final-project-2/repository/comment_repository/comment_pg"
 	"hacktiv8-msib-final-project-2/repository/photo_repository/photo_pg"
 	"hacktiv8-msib-final-project-2/repository/user_repository/user_pg"
 	"hacktiv8-msib-final-project-2/service"
@@ -30,7 +31,11 @@ func StartApp() {
 	photoService := service.NewPhotoService(photoRepo, userRepo)
 	photoHandler := http_handler.NewPhotoService(photoService)
 
-	authService := service.NewAuthService(userRepo, photoRepo)
+	commentRepo := commment_pg.NewCommentPG(db)
+	commentService := service.NewCommentService(commentRepo, userRepo)
+	commentHandler := http_handler.NewCommentService(commentService)
+
+	authService := service.NewAuthService(userRepo, photoRepo, commentRepo)
 
 	r.POST("/users/register", userHandler.Register)
 	r.POST("/users/login", userHandler.Login)
@@ -41,6 +46,8 @@ func StartApp() {
 	r.GET("/photos", authService.Authentication(), photoHandler.GetAllPhotos)
 	r.PUT("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.UpdatePhoto)
 	r.DELETE("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.DeletePhoto)
+
+	r.POST("/comments", authService.Authentication(), commentHandler.CreateComment)
 
 	log.Fatalln(r.Run(":" + PORT))
 }
