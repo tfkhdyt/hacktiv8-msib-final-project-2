@@ -3,7 +3,7 @@ package handler
 import (
 	"hacktiv8-msib-final-project-2/database"
 	"hacktiv8-msib-final-project-2/handler/http_handler"
-	commment_pg "hacktiv8-msib-final-project-2/repository/comment_repository/comment_pg"
+	"hacktiv8-msib-final-project-2/repository/comment_repository/comment_pg"
 	"hacktiv8-msib-final-project-2/repository/photo_repository/photo_pg"
 	"hacktiv8-msib-final-project-2/repository/user_repository/user_pg"
 	"hacktiv8-msib-final-project-2/service"
@@ -31,7 +31,7 @@ func StartApp() {
 	photoService := service.NewPhotoService(photoRepo, userRepo)
 	photoHandler := http_handler.NewPhotoService(photoService)
 
-	commentRepo := commment_pg.NewCommentPG(db)
+	commentRepo := comment_pg.NewCommentPG(db)
 	commentService := service.NewCommentService(commentRepo, photoRepo, userRepo)
 	commentHandler := http_handler.NewCommentService(commentService)
 

@@ -1,4 +1,4 @@
-package commment_pg
+package comment_pg
 
 import (
 	"fmt"
