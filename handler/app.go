@@ -32,10 +32,10 @@ func StartApp() {
 	photoHandler := http_handler.NewPhotoService(photoService)
 
 	commentRepo := commment_pg.NewCommentPG(db)
-	commentService := service.NewCommentService(commentRepo, userRepo)
+	commentService := service.NewCommentService(commentRepo)
 	commentHandler := http_handler.NewCommentService(commentService)
 
-	authService := service.NewAuthService(userRepo, photoRepo, commentRepo)
+	authService := service.NewAuthService(userRepo, photoRepo)
 
 	r.POST("/users/register", userHandler.Register)
 	r.POST("/users/login", userHandler.Login)
@@ -47,7 +47,7 @@ func StartApp() {
 	r.PUT("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.UpdatePhoto)
 	r.DELETE("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.DeletePhoto)
 
-	r.POST("/comments", authService.Authentication(), authService.CommentsAuthorization(), commentHandler.CreateComment)
+	r.POST("/comments", authService.Authentication(), commentHandler.CreateComment)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

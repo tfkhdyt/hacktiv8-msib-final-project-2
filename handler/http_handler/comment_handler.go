@@ -25,8 +25,8 @@ func (c *commentHandler) CreateComment(ctx *gin.Context) {
 		ctx.JSON(newError.StatusCode(), newError)
 		return
 	}
-	var requestBody dto.CreateCommentRequest
 
+	var requestBody dto.CreateCommentRequest
 	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 		newError := errs.NewUnprocessableEntity(err.Error())
 		ctx.JSON(newError.StatusCode(), newError)
