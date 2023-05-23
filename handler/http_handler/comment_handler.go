@@ -6,6 +6,7 @@ import (
 	"hacktiv8-msib-final-project-2/pkg/errs"
 	"hacktiv8-msib-final-project-2/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -57,4 +58,29 @@ func (c *commentHandler) GetAllCommentsByUserID(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, comments)
+}
+
+func (c *commentHandler) UpdateComment(ctx *gin.Context) {
+	commentID := ctx.Param("commentID")
+	commentIDUint, err := strconv.ParseUint(commentID, 10, 32)
+	if err != nil {
+		errValidation := errs.NewBadRequest("Comment id should be in unsigned integer")
+		ctx.JSON(errValidation.StatusCode(), errValidation)
+		return
+	}
+
+	var reqBody dto.UpdateCommentRequest
+	if err := ctx.ShouldBindJSON(&reqBody); err != nil {
+		errValidation := errs.NewUnprocessableEntity(err.Error())
+		ctx.JSON(errValidation.StatusCode(), errValidation)
+		return
+	}
+
+	updatedComment, errUpdate := c.commentService.UpdateComment(uint(commentIDUint), &reqBody)
+	if errUpdate != nil {
+		ctx.JSON(errUpdate.StatusCode(), errUpdate)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, updatedComment)
 }

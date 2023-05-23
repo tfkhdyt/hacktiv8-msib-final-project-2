@@ -30,7 +30,7 @@ type GetAllCommentsResponse struct {
 	Message   string         `json:"message"`
 	PhotoID   uint           `json:"photo_id"`
 	UserID    uint           `json:"user_id"`
-	UpdateAt  time.Time      `json:"update_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
 	CreatedAt time.Time      `json:"created_at"`
 	User      UserDataWithID `json:"user"`
 	Photo     PhotoData      `json:"photo"`
@@ -50,7 +50,9 @@ type PhotoData struct {
 	UserID   uint   `json:"user_id"`
 }
 
-type UpdateCommentRequest CreateCommentRequest
+type UpdateCommentRequest struct {
+	Message string `json:"message" binding:"required"`
+}
 
 func (c *UpdateCommentRequest) ToEntity() *entity.Comment {
 	return &entity.Comment{

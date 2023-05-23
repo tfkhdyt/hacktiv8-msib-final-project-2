@@ -35,7 +35,7 @@ func StartApp() {
 	commentService := service.NewCommentService(commentRepo, photoRepo, userRepo)
 	commentHandler := http_handler.NewCommentService(commentService)
 
-	authService := service.NewAuthService(userRepo, photoRepo)
+	authService := service.NewAuthService(userRepo, photoRepo, commentRepo)
 
 	r.POST("/users/register", userHandler.Register)
 	r.POST("/users/login", userHandler.Login)
@@ -49,6 +49,7 @@ func StartApp() {
 
 	r.POST("/comments", authService.Authentication(), commentHandler.CreateComment)
 	r.GET("/comments", authService.Authentication(), commentHandler.GetAllCommentsByUserID)
+	r.PUT("/comments/:commentID", authService.Authentication(), authService.CommentsAuthorization(), commentHandler.UpdateComment)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

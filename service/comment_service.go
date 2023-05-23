@@ -12,7 +12,7 @@ import (
 type CommentService interface {
 	CreateComment(user *entity.User, payload *dto.CreateCommentRequest) (*dto.CreateCommentResponse, errs.MessageErr)
 	GetAllCommentsByUserID(userID uint) ([]dto.GetAllCommentsResponse, errs.MessageErr)
-	// UpdateComment(id uint, payload *dto.UpdateCommentRequest) (*dto.UpdateCommentResponse, errs.MessageErr)
+	UpdateComment(id uint, payload *dto.UpdateCommentRequest) (*dto.UpdateCommentResponse, errs.MessageErr)
 	// DeleteComment(id uint) (*dto.DeleteCommentResponse, errs.MessageErr)
 }
 
@@ -72,7 +72,7 @@ func (c *commentService) GetAllCommentsByUserID(userID uint) ([]dto.GetAllCommen
 			Message:   comment.Message,
 			PhotoID:   comment.PhotoID,
 			UserID:    comment.UserID,
-			UpdateAt:  comment.UpdatedAt,
+			UpdatedAt: comment.UpdatedAt,
 			CreatedAt: comment.CreatedAt,
 			User: dto.UserDataWithID{
 				ID:       user.ID,
@@ -91,29 +91,30 @@ func (c *commentService) GetAllCommentsByUserID(userID uint) ([]dto.GetAllCommen
 	return response, nil
 }
 
-// func (c *commentService) UpdateComment(id uint, payload *dto.UpdateCommentRequest) (*dto.UpdateCommentResponse, errs.MessageErr) {
-// 	oldComment, err := c.commentRepo.GetCommentByID(id)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	newComment := payload.ToEntity()
-//
-// 	updateComment, err2 := c.commentRepo.UpdateComment(oldComment, newComment)
-// 	if err2 != nil {
-// 		return nil, err2
-// 	}
-//
-// 	response := &dto.UpdateCommentResponse{
-// 		ID:        updateComment.ID,
-// 		Message:   updateComment.Message,
-// 		PhotoID:   updateComment.PhotoID,
-// 		UserID:    updateComment.UserID,
-// 		UpdatedAt: updateComment.UpdatedAt,
-// 	}
-//
-// 	return response, nil
-// }
-//
+func (c *commentService) UpdateComment(id uint, payload *dto.UpdateCommentRequest) (*dto.UpdateCommentResponse, errs.MessageErr) {
+	oldComment, err := c.commentRepo.GetCommentByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	newComment := payload.ToEntity()
+
+	updatedComment, err2 := c.commentRepo.UpdateComment(oldComment, newComment)
+	if err2 != nil {
+		return nil, err2
+	}
+
+	response := &dto.UpdateCommentResponse{
+		ID:        updatedComment.ID,
+		Message:   updatedComment.Message,
+		PhotoID:   updatedComment.PhotoID,
+		UserID:    updatedComment.UserID,
+		UpdatedAt: updatedComment.UpdatedAt,
+	}
+
+	return response, nil
+}
+
 // func (c *commentService) DeleteComment(id uint) (*dto.DeleteCommentResponse, errs.MessageErr) {
 // 	if err := c.commentRepo.DeleteComment(id); err != nil {
 // 		return nil, err

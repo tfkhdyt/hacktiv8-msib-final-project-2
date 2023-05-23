@@ -1,6 +1,7 @@
 package commment_pg
 
 import (
+	"fmt"
 	"hacktiv8-msib-final-project-2/entity"
 	"hacktiv8-msib-final-project-2/pkg/errs"
 	"hacktiv8-msib-final-project-2/repository/comment_repository"
@@ -29,29 +30,31 @@ func (c *commentPG) CreateComment(user *entity.User, comment *entity.Comment) (*
 func (c *commentPG) GetAllCommentsByUserID(userID uint) ([]entity.Comment, errs.MessageErr) {
 	var comments []entity.Comment
 	if err := c.db.Find(&comments, "user_id = ?", userID).Error; err != nil {
+		log.Println(err.Error())
 		return nil, errs.NewInternalServerError("Failed to get all comment")
 	}
 
 	return comments, nil
 }
 
-// func (c *commentPg) GetCommentByID(id uint) (*entity.Comment, errs.MessageErr) {
-// 	var comment entity.Comment
-// 	if err := c.db.First(&comment, id).Error; err != nil {
-// 		return nil, errs.NewNotFound(fmt.Sprintf("Comment with id %d is not found", id))
-// 	}
-//
-// 	return &comment, nil
-// }
-//
-// func (c *commentPg) UpdateComment(oldComment *entity.Comment, newComment *entity.Comment) (*entity.Comment, errs.MessageErr) {
-// 	if err := c.db.Model(oldComment).Updates(newComment).Error; err != nil {
-// 		return nil, errs.NewInternalServerError(fmt.Sprintf("Failed to update comment with id %d", oldComment.ID))
-// 	}
-//
-// 	return oldComment, nil
-// }
-//
+func (c *commentPG) GetCommentByID(id uint) (*entity.Comment, errs.MessageErr) {
+	var comment entity.Comment
+	if err := c.db.First(&comment, id).Error; err != nil {
+		return nil, errs.NewNotFound(fmt.Sprintf("Comment with id %d is not found", id))
+	}
+
+	return &comment, nil
+}
+
+func (c *commentPG) UpdateComment(oldComment *entity.Comment, newComment *entity.Comment) (*entity.Comment, errs.MessageErr) {
+	if err := c.db.Model(oldComment).Updates(newComment).Error; err != nil {
+		log.Println(err.Error())
+		return nil, errs.NewInternalServerError(fmt.Sprintf("Failed to update comment with id %d", oldComment.ID))
+	}
+
+	return oldComment, nil
+}
+
 // func (c *commentPg) DeleteComment(id uint) errs.MessageErr {
 // 	if err := c.db.Delete(&entity.Comment{}, id).Error; err != nil {
 // 		return errs.NewInternalServerError(fmt.Sprintf("Failed to delete comment with id %d", id))
