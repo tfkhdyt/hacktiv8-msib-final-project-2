@@ -33,6 +33,11 @@ func NewCommentService(
 func (c *commentService) CreateComment(user *entity.User, payload *dto.CreateCommentRequest) (*dto.CreateCommentResponse, errs.MessageErr) {
 	comment := payload.ToEntity()
 
+	_, errCheckPhoto := c.photoRepo.GetPhotoByID(comment.PhotoID)
+	if errCheckPhoto != nil {
+		return nil, errCheckPhoto
+	}
+
 	createdComment, err := c.commentRepo.CreateComment(user, comment)
 	if err != nil {
 		return nil, err
