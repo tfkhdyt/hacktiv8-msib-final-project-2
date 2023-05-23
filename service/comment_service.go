@@ -37,9 +37,9 @@ func (c *commentService) CreateComment(user *entity.User, payload *dto.CreateCom
 	response := &dto.CreateCommentResponse{
 		ID:        createdComment.ID,
 		Message:   createdComment.Message,
-		PhotoID:   comment.PhotoID,
+		PhotoID:   createdComment.PhotoID,
 		UserID:    createdComment.UserID,
-		CreatedAt: comment.CreatedAt,
+		CreatedAt: createdComment.CreatedAt,
 	}
 
 	return response, nil

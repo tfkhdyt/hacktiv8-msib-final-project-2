@@ -18,8 +18,8 @@ type AuthService interface {
 }
 
 type authService struct {
-	userRepo  user_repository.UserRepository
-	photoRepo photo_repository.PhotoRepository
+	userRepo    user_repository.UserRepository
+	photoRepo   photo_repository.PhotoRepository
 	commentRepo comment_repository.CommentRepository
 }
 

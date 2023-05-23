@@ -47,7 +47,7 @@ func StartApp() {
 	r.PUT("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.UpdatePhoto)
 	r.DELETE("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.DeletePhoto)
 
-	r.POST("/comments", authService.Authentication(), commentHandler.CreateComment)
+	r.POST("/comments", authService.Authentication(), authService.CommentsAuthorization(), commentHandler.CreateComment)
 
 	log.Fatalln(r.Run(":" + PORT))
 }
