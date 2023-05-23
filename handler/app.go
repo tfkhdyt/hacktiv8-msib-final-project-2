@@ -32,7 +32,7 @@ func StartApp() {
 	photoHandler := http_handler.NewPhotoService(photoService)
 
 	commentRepo := commment_pg.NewCommentPG(db)
-	commentService := service.NewCommentService(commentRepo)
+	commentService := service.NewCommentService(commentRepo, photoRepo, userRepo)
 	commentHandler := http_handler.NewCommentService(commentService)
 
 	authService := service.NewAuthService(userRepo, photoRepo)
@@ -48,6 +48,7 @@ func StartApp() {
 	r.DELETE("/photos/:photoID", authService.Authentication(), authService.PhotosAuthorization(), photoHandler.DeletePhoto)
 
 	r.POST("/comments", authService.Authentication(), commentHandler.CreateComment)
+	r.GET("/comments", authService.Authentication(), commentHandler.GetAllCommentsByUserID)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

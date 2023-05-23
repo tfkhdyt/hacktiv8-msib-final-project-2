@@ -41,3 +41,20 @@ func (c *commentHandler) CreateComment(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, createdComment)
 }
+
+func (c *commentHandler) GetAllCommentsByUserID(ctx *gin.Context) {
+	userData, ok := ctx.MustGet("userData").(*entity.User)
+	if !ok {
+		newError := errs.NewBadRequest("Failed to get user data")
+		ctx.JSON(newError.StatusCode(), newError)
+		return
+	}
+
+	comments, err := c.commentService.GetAllCommentsByUserID(userData.ID)
+	if err != nil {
+		ctx.JSON(err.StatusCode(), err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, comments)
+}

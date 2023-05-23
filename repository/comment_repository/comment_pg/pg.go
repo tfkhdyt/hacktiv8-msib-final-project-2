@@ -9,15 +9,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type commentPg struct {
+type commentPG struct {
 	db *gorm.DB
 }
 
 func NewCommentPG(db *gorm.DB) comment_repository.CommentRepository {
-	return &commentPg{db: db}
+	return &commentPG{db: db}
 }
 
-func (c *commentPg) CreateComment(user *entity.User, comment *entity.Comment) (*entity.Comment, errs.MessageErr) {
+func (c *commentPG) CreateComment(user *entity.User, comment *entity.Comment) (*entity.Comment, errs.MessageErr) {
 	if err := c.db.Model(user).Association("Comments").Append(comment); err != nil {
 		log.Println(err.Error())
 		return nil, errs.NewInternalServerError("Failed to create new comment")
@@ -26,15 +26,15 @@ func (c *commentPg) CreateComment(user *entity.User, comment *entity.Comment) (*
 	return comment, nil
 }
 
-// func (c *commentPg) GetAllComments() ([]entity.Comment, errs.MessageErr) {
-// 	var comments []entity.Comment
-// 	if err := c.db.Find(&comments).Error; err != nil {
-// 		return nil, errs.NewInternalServerError("Failed to get all comment")
-// 	}
-//
-// 	return comments, nil
-// }
-//
+func (c *commentPG) GetAllCommentsByUserID(userID uint) ([]entity.Comment, errs.MessageErr) {
+	var comments []entity.Comment
+	if err := c.db.Find(&comments, "user_id = ?", userID).Error; err != nil {
+		return nil, errs.NewInternalServerError("Failed to get all comment")
+	}
+
+	return comments, nil
+}
+
 // func (c *commentPg) GetCommentByID(id uint) (*entity.Comment, errs.MessageErr) {
 // 	var comment entity.Comment
 // 	if err := c.db.First(&comment, id).Error; err != nil {
