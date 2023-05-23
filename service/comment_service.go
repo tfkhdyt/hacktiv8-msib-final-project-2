@@ -13,7 +13,7 @@ type CommentService interface {
 	CreateComment(user *entity.User, payload *dto.CreateCommentRequest) (*dto.CreateCommentResponse, errs.MessageErr)
 	GetAllCommentsByUserID(userID uint) ([]dto.GetAllCommentsResponse, errs.MessageErr)
 	UpdateComment(id uint, payload *dto.UpdateCommentRequest) (*dto.UpdateCommentResponse, errs.MessageErr)
-	// DeleteComment(id uint) (*dto.DeleteCommentResponse, errs.MessageErr)
+	DeleteComment(id uint) (*dto.DeleteCommentResponse, errs.MessageErr)
 }
 
 type commentService struct {
@@ -115,14 +115,14 @@ func (c *commentService) UpdateComment(id uint, payload *dto.UpdateCommentReques
 	return response, nil
 }
 
-// func (c *commentService) DeleteComment(id uint) (*dto.DeleteCommentResponse, errs.MessageErr) {
-// 	if err := c.commentRepo.DeleteComment(id); err != nil {
-// 		return nil, err
-// 	}
-//
-// 	response := &dto.DeleteCommentResponse{
-// 		Message: "Your message has been successfuly deleted",
-// 	}
-//
-// 	return response, nil
-// }
+func (c *commentService) DeleteComment(id uint) (*dto.DeleteCommentResponse, errs.MessageErr) {
+	if err := c.commentRepo.DeleteComment(id); err != nil {
+		return nil, err
+	}
+
+	response := &dto.DeleteCommentResponse{
+		Message: "Your comment has been successfully deleted",
+	}
+
+	return response, nil
+}

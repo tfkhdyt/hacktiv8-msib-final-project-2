@@ -84,3 +84,21 @@ func (c *commentHandler) UpdateComment(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, updatedComment)
 }
+
+func (c *commentHandler) DeleteComment(ctx *gin.Context) {
+	commentID := ctx.Param("commentID")
+	commentIDUint, err := strconv.ParseUint(commentID, 10, 32)
+	if err != nil {
+		errValidation := errs.NewBadRequest("Comment id should be in unsigned integer")
+		ctx.JSON(errValidation.StatusCode(), errValidation)
+		return
+	}
+
+	response, errDelete := c.commentService.DeleteComment(uint(commentIDUint))
+	if errDelete != nil {
+		ctx.JSON(errDelete.StatusCode(), errDelete)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response)
+}

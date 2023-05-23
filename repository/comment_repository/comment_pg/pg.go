@@ -55,10 +55,11 @@ func (c *commentPG) UpdateComment(oldComment *entity.Comment, newComment *entity
 	return oldComment, nil
 }
 
-// func (c *commentPg) DeleteComment(id uint) errs.MessageErr {
-// 	if err := c.db.Delete(&entity.Comment{}, id).Error; err != nil {
-// 		return errs.NewInternalServerError(fmt.Sprintf("Failed to delete comment with id %d", id))
-// 	}
-//
-// 	return nil
-// }
+func (c *commentPG) DeleteComment(id uint) errs.MessageErr {
+	if err := c.db.Delete(&entity.Comment{}, id).Error; err != nil {
+		log.Println("Error:", err.Error())
+		return errs.NewInternalServerError(fmt.Sprintf("Failed to delete comment with id %d", id))
+	}
+
+	return nil
+}

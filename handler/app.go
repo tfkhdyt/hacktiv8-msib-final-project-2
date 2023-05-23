@@ -50,6 +50,7 @@ func StartApp() {
 	r.POST("/comments", authService.Authentication(), commentHandler.CreateComment)
 	r.GET("/comments", authService.Authentication(), commentHandler.GetAllCommentsByUserID)
 	r.PUT("/comments/:commentID", authService.Authentication(), authService.CommentsAuthorization(), commentHandler.UpdateComment)
+	r.DELETE("/comments/:commentID", authService.Authentication(), authService.CommentsAuthorization(), commentHandler.DeleteComment)
 
 	log.Fatalln(r.Run(":" + PORT))
 }
