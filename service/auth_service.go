@@ -5,6 +5,7 @@ import (
 	"hacktiv8-msib-final-project-2/pkg/errs"
 	"hacktiv8-msib-final-project-2/repository/comment_repository"
 	"hacktiv8-msib-final-project-2/repository/photo_repository"
+	"hacktiv8-msib-final-project-2/repository/socialmedia_repository"
 	"hacktiv8-msib-final-project-2/repository/user_repository"
 	"strconv"
 
@@ -15,20 +16,23 @@ type AuthService interface {
 	Authentication() gin.HandlerFunc
 	PhotosAuthorization() gin.HandlerFunc
 	CommentsAuthorization() gin.HandlerFunc
+	SocialmediasAuthorization() gin.HandlerFunc
 }
 
 type authService struct {
-	userRepo    user_repository.UserRepository
-	photoRepo   photo_repository.PhotoRepository
-	commentRepo comment_repository.CommentRepository
+	userRepo        user_repository.UserRepository
+	photoRepo       photo_repository.PhotoRepository
+	commentRepo     comment_repository.CommentRepository
+	socialmediaRepo socialmedia_repository.SocialMediaRepository
 }
 
 func NewAuthService(
 	userRepo user_repository.UserRepository,
 	photoRepo photo_repository.PhotoRepository,
 	commentRepo comment_repository.CommentRepository,
+	socialmediaRepo socialmedia_repository.SocialMediaRepository,
 ) AuthService {
-	return &authService{userRepo: userRepo, photoRepo: photoRepo, commentRepo: commentRepo}
+	return &authService{userRepo: userRepo, photoRepo: photoRepo, commentRepo: commentRepo, socialmediaRepo: socialmediaRepo}
 }
 
 func (a *authService) Authentication() gin.HandlerFunc {
@@ -111,6 +115,39 @@ func (a *authService) CommentsAuthorization() gin.HandlerFunc {
 
 		if comment.UserID != userData.ID {
 			newError := errs.NewUnauthorized("You're not authorized to modify this comment")
+			ctx.AbortWithStatusJSON(newError.StatusCode(), newError)
+			return
+		}
+
+		ctx.Next()
+	}
+}
+
+func (a *authService) SocialmediasAuthorization() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		userData, ok := ctx.MustGet("userData").(*entity.User)
+		if !ok {
+			newError := errs.NewBadRequest("Failed to get user data")
+			ctx.AbortWithStatusJSON(newError.StatusCode(), newError)
+			return
+		}
+
+		socialmediaID := ctx.Param("socialmediaID")
+		socialmediaIDUint, err := strconv.ParseUint(socialmediaID, 10, 32)
+		if err != nil {
+			newError := errs.NewBadRequest("Social Media id should be an unsigned integer")
+			ctx.AbortWithStatusJSON(newError.StatusCode(), newError)
+			return
+		}
+
+		socialmedia, err2 := a.commentRepo.GetCommentByID(uint(socialmediaIDUint))
+		if err2 != nil {
+			ctx.AbortWithStatusJSON(err2.StatusCode(), err2)
+			return
+		}
+
+		if socialmedia.UserID != userData.ID {
+			newError := errs.NewUnauthorized("You're not authorized to modify this Social Media")
 			ctx.AbortWithStatusJSON(newError.StatusCode(), newError)
 			return
 		}
