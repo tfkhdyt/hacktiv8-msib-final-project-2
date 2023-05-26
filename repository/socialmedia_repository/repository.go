@@ -10,4 +10,5 @@ type SocialMediaRepository interface {
 	GetAllSocialMediasByUserSosmed(userID uint) ([]entity.SocialMedia, errs.MessageErr)
 	GetSocialMediaByID(id uint) (*entity.SocialMedia, errs.MessageErr)
 	UpdateSocialMedia(oldSocialMedia *entity.SocialMedia, newSocialMedia *entity.SocialMedia) (*entity.SocialMedia, errs.MessageErr)
+	DeleteSocialMedia(id uint) errs.MessageErr
 }

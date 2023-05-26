@@ -53,3 +53,12 @@ func (s *socialmediaPG) UpdateSocialMedia(oldSocialMedia *entity.SocialMedia, ne
 
 	return oldSocialMedia, nil
 }
+
+func (s *socialmediaPG) DeleteSocialMedia(id uint) errs.MessageErr {
+	if err := s.db.Delete(&entity.SocialMedia{}, id).Error; err != nil {
+		log.Println("Error:", err.Error())
+		return errs.NewInternalServerError(fmt.Sprintf("Failed to delete Social Media with id %d", id))
+	}
+
+	return nil
+}

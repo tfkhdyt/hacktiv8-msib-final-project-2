@@ -12,6 +12,7 @@ type SocialMediaService interface {
 	CreateSocialMedia(user *entity.User, payload *dto.CreateSocialMediaRequest) (*dto.CreateSocialMediaResponse, errs.MessageErr)
 	GetAllSocialMediasByUserSosmed(userID uint) (*dto.GetAllSocialMediasResponse, errs.MessageErr)
 	UpdateSocialMedia(id uint, payload *dto.UpdateSocialMediaRequest) (*dto.UpdateSocialMediaResponse, errs.MessageErr)
+	DeleteSocialMedia(id uint) (*dto.DeleteSocialMediaResponse, errs.MessageErr)
 }
 
 type socialmediaService struct {
@@ -95,6 +96,18 @@ func (s *socialmediaService) UpdateSocialMedia(id uint, payload *dto.UpdateSocia
 		SocialMediaURL: updatedSocialMedia.SocialMediaURL,
 		UserID:         updatedSocialMedia.UserID,
 		UpdatedAt:      updatedSocialMedia.UpdatedAt,
+	}
+
+	return response, nil
+}
+
+func (s *socialmediaService) DeleteSocialMedia(id uint) (*dto.DeleteSocialMediaResponse, errs.MessageErr) {
+	if err := s.socialmediaRepo.DeleteSocialMedia(id); err != nil {
+		return nil, err
+	}
+
+	response := &dto.DeleteSocialMediaResponse{
+		Message: "Your social media has been successfully deleted",
 	}
 
 	return response, nil

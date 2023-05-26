@@ -60,6 +60,7 @@ func StartApp() {
 	r.POST("/socialmedias", authService.Authentication(), socialmediaHandler.CreateSocialMedia)
 	r.GET("/socialmedias", authService.Authentication(), socialmediaHandler.GetAllSocialMediasByUserSosmed)
 	r.PUT("/socialmedias/:socialMediaID", authService.Authentication(), authService.SocialmediasAuthorization(), socialmediaHandler.UpdateSocialMedia)
+	r.DELETE("/socialmedias/:socialMediaID", authService.Authentication(), authService.SocialmediasAuthorization(), socialmediaHandler.DeleteSocialMedia)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

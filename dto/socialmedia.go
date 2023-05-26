@@ -63,3 +63,7 @@ type SocialMediaData struct {
 	UpdatedAt      time.Time   `json:"updated_at"`
 	User           UserDataSos `json:"user"`
 }
+
+type DeleteSocialMediaResponse struct {
+	Message string `json:"message"`
+}

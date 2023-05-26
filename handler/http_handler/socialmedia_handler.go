@@ -84,3 +84,21 @@ func (s *socialmediaHandler) UpdateSocialMedia(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, updatedSocialMedia)
 }
+
+func (s *socialmediaHandler) DeleteSocialMedia(ctx *gin.Context) {
+	socialMediaID := ctx.Param("socialMediaID")
+	socialMediaIDUint, err := strconv.ParseUint(socialMediaID, 10, 32)
+	if err != nil {
+		errValidation := errs.NewBadRequest("Comment id should be in unsigned integer")
+		ctx.JSON(errValidation.StatusCode(), errValidation)
+		return
+	}
+
+	response, errDelete := s.socialmediaService.DeleteSocialMedia(uint(socialMediaIDUint))
+	if errDelete != nil {
+		ctx.JSON(errDelete.StatusCode(), errDelete)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response)
+}
