@@ -58,6 +58,8 @@ func StartApp() {
 	r.DELETE("/comments/:commentID", authService.Authentication(), authService.CommentsAuthorization(), commentHandler.DeleteComment)
 
 	r.POST("/socialmedias", authService.Authentication(), socialmediaHandler.CreateSocialMedia)
+	r.GET("/socialmedias", authService.Authentication(), socialmediaHandler.GetAllSocialMediasByUserSosmed)
+	r.PUT("/socialmedias/:socialMediaID", authService.Authentication(), authService.SocialmediasAuthorization(), socialmediaHandler.UpdateSocialMedia)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

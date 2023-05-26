@@ -132,7 +132,7 @@ func (a *authService) SocialmediasAuthorization() gin.HandlerFunc {
 			return
 		}
 
-		socialmediaID := ctx.Param("socialmediaID")
+		socialmediaID := ctx.Param("socialMediaID")
 		socialmediaIDUint, err := strconv.ParseUint(socialmediaID, 10, 32)
 		if err != nil {
 			newError := errs.NewBadRequest("Social Media id should be an unsigned integer")
@@ -140,7 +140,7 @@ func (a *authService) SocialmediasAuthorization() gin.HandlerFunc {
 			return
 		}
 
-		socialmedia, err2 := a.commentRepo.GetCommentByID(uint(socialmediaIDUint))
+		socialmedia, err2 := a.socialmediaRepo.GetSocialMediaByID(uint(socialmediaIDUint))
 		if err2 != nil {
 			ctx.AbortWithStatusJSON(err2.StatusCode(), err2)
 			return
