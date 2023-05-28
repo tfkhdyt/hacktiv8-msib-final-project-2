@@ -18,9 +18,13 @@ type databaseConfig struct {
 	dbName   string
 }
 
+var ginMode = os.Getenv("GIN_MODE")
+
 func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalln(err.Error())
+	if ginMode != "release" {
+		if err := godotenv.Load(); err != nil {
+			log.Fatalln(err.Error())
+		}
 	}
 }
 

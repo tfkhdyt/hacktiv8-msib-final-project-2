@@ -1,16 +1,18 @@
 package handler
 
 import (
-	"hacktiv8-msib-final-project-2/database"
-	"hacktiv8-msib-final-project-2/handler/http_handler"
-	"hacktiv8-msib-final-project-2/repository/comment_repository/comment_pg"
-	"hacktiv8-msib-final-project-2/repository/photo_repository/photo_pg"
-	"hacktiv8-msib-final-project-2/repository/user_repository/user_pg"
-	"hacktiv8-msib-final-project-2/service"
 	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
+
+	"hacktiv8-msib-final-project-2/database"
+	"hacktiv8-msib-final-project-2/handler/http_handler"
+	"hacktiv8-msib-final-project-2/repository/comment_repository/comment_pg"
+	"hacktiv8-msib-final-project-2/repository/photo_repository/photo_pg"
+	"hacktiv8-msib-final-project-2/repository/socialmedia_repository/socialmedia_pg"
+	"hacktiv8-msib-final-project-2/repository/user_repository/user_pg"
+	"hacktiv8-msib-final-project-2/service"
 )
 
 var PORT = os.Getenv("PORT")
@@ -35,7 +37,11 @@ func StartApp() {
 	commentService := service.NewCommentService(commentRepo, photoRepo, userRepo)
 	commentHandler := http_handler.NewCommentService(commentService)
 
-	authService := service.NewAuthService(userRepo, photoRepo, commentRepo)
+	socialmediaRepo := socialmedia_pg.NewSocialMediaPG(db)
+	socialmediaService := service.NewSocialMediaService(socialmediaRepo, userRepo)
+	socialmediaHandler := http_handler.NewSocialMediaService(socialmediaService)
+
+	authService := service.NewAuthService(userRepo, photoRepo, commentRepo, socialmediaRepo)
 
 	r.POST("/users/register", userHandler.Register)
 	r.POST("/users/login", userHandler.Login)
@@ -51,6 +57,11 @@ func StartApp() {
 	r.GET("/comments", authService.Authentication(), commentHandler.GetAllCommentsByUserID)
 	r.PUT("/comments/:commentID", authService.Authentication(), authService.CommentsAuthorization(), commentHandler.UpdateComment)
 	r.DELETE("/comments/:commentID", authService.Authentication(), authService.CommentsAuthorization(), commentHandler.DeleteComment)
+
+	r.POST("/socialmedias", authService.Authentication(), socialmediaHandler.CreateSocialMedia)
+	r.GET("/socialmedias", authService.Authentication(), socialmediaHandler.GetAllSocialMediasByUserSosmed)
+	r.PUT("/socialmedias/:socialMediaID", authService.Authentication(), authService.SocialmediasAuthorization(), socialmediaHandler.UpdateSocialMedia)
+	r.DELETE("/socialmedias/:socialMediaID", authService.Authentication(), authService.SocialmediasAuthorization(), socialmediaHandler.DeleteSocialMedia)
 
 	log.Fatalln(r.Run(":" + PORT))
 }

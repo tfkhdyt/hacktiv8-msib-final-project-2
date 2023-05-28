@@ -1,27 +1,29 @@
 package entity
 
 import (
-	"hacktiv8-msib-final-project-2/pkg/errs"
 	"log"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
+	jwt "github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+
+	"hacktiv8-msib-final-project-2/pkg/errs"
 )
 
 var JWT_SECRET = os.Getenv("JWT_SECRET")
 
 type User struct {
 	gorm.Model
-	Username string    `gorm:"unique;not null" binding:"required"`
-	Email    string    `gorm:"unique;not null" binding:"email,required"`
-	Password string    `gorm:"not null" binding:"required,min=6"`
-	Age      uint      `gorm:"not null" binding:"required,min=8"`
-	Photos   []Photo   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Comments []Comment `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Username     string        `gorm:"unique;not null" binding:"required"`
+	Email        string        `gorm:"unique;not null" binding:"email,required"`
+	Password     string        `gorm:"not null" binding:"required,min=6"`
+	Age          uint          `gorm:"not null" binding:"required,min=8"`
+	Photos       []Photo       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Comments     []Comment     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	SocialMedias []SocialMedia `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 func (u *User) HashPassword() errs.MessageErr {

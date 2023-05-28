@@ -1,8 +1,9 @@
 package dto
 
 import (
-	"hacktiv8-msib-final-project-2/entity"
 	"time"
+
+	"hacktiv8-msib-final-project-2/entity"
 )
 
 type CreatePhotoRequest struct {

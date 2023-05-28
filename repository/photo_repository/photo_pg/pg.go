@@ -2,12 +2,13 @@ package photo_pg
 
 import (
 	"fmt"
-	"hacktiv8-msib-final-project-2/entity"
-	"hacktiv8-msib-final-project-2/pkg/errs"
-	"hacktiv8-msib-final-project-2/repository/photo_repository"
 	"log"
 
 	"gorm.io/gorm"
+
+	"hacktiv8-msib-final-project-2/entity"
+	"hacktiv8-msib-final-project-2/pkg/errs"
+	"hacktiv8-msib-final-project-2/repository/photo_repository"
 )
 
 type photoPg struct {
