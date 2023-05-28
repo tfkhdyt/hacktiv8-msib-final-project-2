@@ -2,7 +2,13 @@ pre-commit:
   commands:
     lint:
       run: golangci-lint run --fix
+    goimports:
+      run: goimports-reviser -rm-unused -set-alias -format ./...
+  parallel: true
 pre-push:
   commands:
     lint:
       run: golangci-lint run
+    goimports:
+      run: goimports-reviser -rm-unused -set-alias -format ./...
+  parallel: true

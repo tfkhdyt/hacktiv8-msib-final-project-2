@@ -1,15 +1,16 @@
 package service
 
 import (
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+
 	"hacktiv8-msib-final-project-2/entity"
 	"hacktiv8-msib-final-project-2/pkg/errs"
 	"hacktiv8-msib-final-project-2/repository/comment_repository"
 	"hacktiv8-msib-final-project-2/repository/photo_repository"
 	"hacktiv8-msib-final-project-2/repository/socialmedia_repository"
 	"hacktiv8-msib-final-project-2/repository/user_repository"
-	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 type AuthService interface {
