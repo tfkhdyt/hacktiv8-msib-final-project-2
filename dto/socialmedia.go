@@ -8,7 +8,7 @@ import (
 
 type CreateSocialMediaRequest struct {
 	Name           string `json:"name" binding:"required"`
-	SocialMediaURL string `json:"social_media_url" binding:"required"`
+	SocialMediaURL string `json:"social_media_url" binding:"required,url"`
 }
 
 func (s *CreateSocialMediaRequest) ToEntity() *entity.SocialMedia {
@@ -37,7 +37,7 @@ type UserDataSos struct {
 
 type UpdateSocialMediaRequest struct {
 	Name           string `json:"name" binding:"required"`
-	SocialMediaURL string `json:"social_media_url" binding:"required"`
+	SocialMediaURL string `json:"social_media_url" binding:"required,url"`
 }
 
 func (s *UpdateSocialMediaRequest) ToEntity() *entity.SocialMedia {
