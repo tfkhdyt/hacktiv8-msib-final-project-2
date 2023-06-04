@@ -59,7 +59,6 @@ func (s *socialmediaService) GetAllSocialMediasByUserSosmed(userID uint) (*dto.G
 			return nil, err
 		}
 
-		response.SocialMedias = []dto.SocialMediaData{}
 		response.SocialMedias = append(response.SocialMedias, dto.SocialMediaData{
 			ID:             socialmedia.ID,
 			Name:           socialmedia.Name,
