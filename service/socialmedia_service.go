@@ -52,14 +52,14 @@ func (s *socialmediaService) GetAllSocialMediasByUserSosmed(userID uint) (*dto.G
 		return nil, err
 	}
 
-	response := &dto.GetAllSocialMediasResponse{}
+	socialMediasData := []dto.SocialMediaData{}
 	for _, socialmedia := range socialmedias {
 		user, err := s.userRepo.GetUserByID(socialmedia.UserID)
 		if err != nil {
 			return nil, err
 		}
 
-		response.SocialMedias = append(response.SocialMedias, dto.SocialMediaData{
+		socialMediasData = append(socialMediasData, dto.SocialMediaData{
 			ID:             socialmedia.ID,
 			Name:           socialmedia.Name,
 			SocialMediaURL: socialmedia.SocialMediaURL,
@@ -72,6 +72,10 @@ func (s *socialmediaService) GetAllSocialMediasByUserSosmed(userID uint) (*dto.G
 			},
 		},
 		)
+	}
+
+	response := &dto.GetAllSocialMediasResponse{
+		SocialMedias: socialMediasData,
 	}
 
 	return response, nil
