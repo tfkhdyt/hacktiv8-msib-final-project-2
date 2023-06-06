@@ -33,8 +33,8 @@ type GetAllCommentsResponse struct {
 	UserID    uint           `json:"user_id"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	CreatedAt time.Time      `json:"created_at"`
-	User      UserDataWithID `json:"user"`
-	Photo     PhotoData      `json:"photo"`
+	User      UserDataWithID `json:"User"`
+	Photo     PhotoData      `json:"Photo"`
 }
 
 type UserDataWithID struct {
