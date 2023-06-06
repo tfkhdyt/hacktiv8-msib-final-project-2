@@ -30,7 +30,7 @@ type GetAllSocialMediasResponse struct {
 	SocialMedias []SocialMediaData `json:"social_medias"`
 }
 
-type UserDataSos struct {
+type UserDataSocialMedia struct {
 	ID       uint   `json:"id"`
 	Username string `json:"username"`
 }
@@ -62,7 +62,7 @@ type SocialMediaData struct {
 	UserID         uint        `json:"user_id"`
 	CreatedAt      time.Time   `json:"created_at"`
 	UpdatedAt      time.Time   `json:"updated_at"`
-	User           UserDataSos `json:"user"`
+	User           UserDataSocialMedia `json:"user"`
 }
 
 type DeleteSocialMediaResponse struct {

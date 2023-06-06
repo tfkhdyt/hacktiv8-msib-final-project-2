@@ -66,7 +66,7 @@ func (s *socialmediaService) GetAllSocialMediasByUserSosmed(userID uint) (*dto.G
 			UserID:         socialmedia.UserID,
 			CreatedAt:      socialmedia.CreatedAt,
 			UpdatedAt:      socialmedia.UpdatedAt,
-			User: dto.UserDataSos{
+			User: dto.UserDataSocialMedia{
 				ID:       user.ID,
 				Username: user.Username,
 			},
