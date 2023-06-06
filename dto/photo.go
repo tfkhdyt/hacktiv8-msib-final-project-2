@@ -37,7 +37,7 @@ type GetAllPhotosResponse struct {
 	UserID    uint      `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	User      UserData  `json:"user"`
+	User      UserData  `json:"User"`
 }
 
 type UserData struct {
