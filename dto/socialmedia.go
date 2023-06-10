@@ -59,10 +59,10 @@ type SocialMediaData struct {
 	ID             uint        `json:"id"`
 	Name           string      `json:"name"`
 	SocialMediaURL string      `json:"social_media_url"`
-	UserID         uint        `json:"UserId"`
-	CreatedAt      time.Time   `json:"createdAt"`
-	UpdatedAt      time.Time   `json:"updatedAt"`
-	User           UserDataSocialMedia `json:"User"`
+	UserID         uint        `json:"user_id"`
+	CreatedAt      time.Time   `json:"created_at"`
+	UpdatedAt      time.Time   `json:"updated_at"`
+	User           UserDataSocialMedia `json:"user"`
 }
 
 type DeleteSocialMediaResponse struct {
